@@ -73,7 +73,7 @@ public class DistributedLock {
         redisScript.setResultType(Long.class);
         redisScript.setScriptSource(new ResourceScriptSource(new
                 ClassPathResource("/script/releaseLock.lua")));
-        Long result = (Long)redisUtils.eval(redisScript,delayKey,value);
+        Long result = redisUtils.eval(redisScript,delayKey,value);
         if(Objects.equals(result,keyResult)) {
             logger.info("------- 解锁了 -------");
         }

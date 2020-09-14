@@ -71,14 +71,12 @@ public class RedisUtils {
         return stringRedisTemplate.opsForValue().setIfAbsent(key,value,timeout,timeUnit);
     }
 
-    public Object eval(RedisScript redisScript, String key, String value){
-        return stringRedisTemplate.execute(redisScript, Collections.singletonList(key),value);
+    public Long eval(RedisScript redisScript, String key, String value){
+        return (Long)stringRedisTemplate.execute(redisScript, Collections.singletonList(key),value);
     }
 
     public String eval(RedisScript redisScript, String key, String value, Long time){
         List<String> keys = Collections.singletonList(key);
-        RedisSerializer<String> argsSerializer = new StringRedisSerializer();
-        RedisSerializer<String> resultSerializer = new StringRedisSerializer();
-        return stringRedisTemplate.execute(redisScript, argsSerializer,resultSerializer, keys,value,String.valueOf(time));
+        return (String) stringRedisTemplate.execute(redisScript, keys,value,String.valueOf(time));
     }
 }
