@@ -7,4 +7,6 @@ package com.estranger.www.service;
  */
 public interface DelayService {
     void delayKey();
+
+    void delete();
 }

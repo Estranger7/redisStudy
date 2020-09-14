@@ -2,13 +2,11 @@ package com.estranger.www.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -21,13 +19,14 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisUtils {
 
+   @Autowired
+   private RedisTemplate<String,String> stringRedisTemplate;
 
-    private final RedisTemplate<String, Object> redisTemplate;
+   @Autowired
+   private RedisTemplate<String,Object> redisTemplate;
 
-    @Autowired
-    public RedisUtils(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
+
+
 
     //删除key
     public void delete(String key) {
@@ -35,7 +34,7 @@ public class RedisUtils {
     }
 
     //设置一个string
-    public void setStringValue(String key, Object value) {
+    public void setStringValue(String key, String value) {
         redisTemplate.opsForValue().set(key, value);
     }
 
@@ -68,20 +67,18 @@ public class RedisUtils {
     }
 
     //setNx
-    public Boolean setNx(String key, Object value,Long timeout,TimeUnit timeUnit){
-        return redisTemplate.opsForValue().setIfAbsent(key,value,timeout,timeUnit);
+    public Boolean setNx(String key, String value,Long timeout,TimeUnit timeUnit){
+        return stringRedisTemplate.opsForValue().setIfAbsent(key,value,timeout,timeUnit);
     }
 
-    public void eval(DefaultRedisScript redisScript, String key, String value){
-        RedisSerializer<String> argsSerializer = new StringRedisSerializer();
-        RedisSerializer<String> resultSerializer = new StringRedisSerializer();
-        redisTemplate.execute(redisScript,argsSerializer,resultSerializer, Collections.singletonList(key),Collections.singletonList(value));
+    public Object eval(RedisScript redisScript, String key, String value){
+        return stringRedisTemplate.execute(redisScript, Collections.singletonList(key),value);
     }
 
     public String eval(RedisScript redisScript, String key, String value, Long time){
         List<String> keys = Collections.singletonList(key);
         RedisSerializer<String> argsSerializer = new StringRedisSerializer();
         RedisSerializer<String> resultSerializer = new StringRedisSerializer();
-        return redisTemplate.execute(redisScript, argsSerializer,resultSerializer, keys,value,String.valueOf(time));
+        return stringRedisTemplate.execute(redisScript, argsSerializer,resultSerializer, keys,value,String.valueOf(time));
     }
 }

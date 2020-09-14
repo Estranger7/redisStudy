@@ -41,6 +41,11 @@ public class DelayServiceImpl implements DelayService{
 
     }
 
+    @Override
+    public void delete() {
+        distributedLock.unLock("test","1");
+    }
+
     private void doSomeThing() {
         try {
             logger.info("------- 业务执行开始 -------");
