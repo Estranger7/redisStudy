@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: develop
+  application:
+    name: RedisStudy
+
+server:
+  port: 8080
+  servlet:
+    context-path: /RedisStudy
