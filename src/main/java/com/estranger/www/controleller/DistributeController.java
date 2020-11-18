@@ -36,9 +36,5 @@ public class DistributeController {
     }
 
 
-    @RequestMapping("/delete")
-    public ResponseBase deleteKey(){
-        delayService.delete();
-        return ResponseBase.create().buildStatus(ResponseStatusEnum.NORMAL_RETURNED);
-    }
+
 }
