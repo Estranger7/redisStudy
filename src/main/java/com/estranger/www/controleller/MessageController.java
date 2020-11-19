@@ -23,16 +23,18 @@ public class MessageController {
     /**
      * Author：Estranger
      * Description：测试简单限流
+     * 设定一个用户60s内最多只能回复3个帖子
      * Date：2020/11/18
      */
     @RequestMapping("/reply")
     public ResponseBase reply(@RequestParam String userId) {
         try {
-            messageService.reply(userId);
+            String msg = messageService.reply(userId);
+            return ResponseBase.create().buildStatus(ResponseStatusEnum.NORMAL_RETURNED).buildData(msg);
         } catch (Exception e) {
             return ResponseBase.create().buildStatus(ResponseStatusEnum.SERVER_ERROR);
         }
 
-        return ResponseBase.create().buildStatus(ResponseStatusEnum.NORMAL_RETURNED);
+
     }
 }

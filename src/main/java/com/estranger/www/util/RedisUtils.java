@@ -3,10 +3,7 @@ package com.estranger.www.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -62,8 +59,25 @@ public class RedisUtils {
     }
 
     //设置key的有效期
-    public void expire(String key,Long timeout){
-        redisTemplate.expire(key,timeout,TimeUnit.HOURS);
+    public void expire(String key,Long timeout,TimeUnit timeUnit){
+        redisTemplate.expire(key,timeout,timeUnit);
+    }
+
+
+    //设置一个zset
+    public void zadd(String key,String value,Double score){
+        redisTemplate.opsForZSet().add(key,value,score);
+    }
+
+
+    //移除某一个范围内的zset
+    public void zremrangeByScore(String key,Double start,Double end){
+        redisTemplate.opsForZSet().removeRangeByScore(key,start,end);
+    }
+
+    //获取zset的大小
+    public Long zcard(String key){
+        return  redisTemplate.opsForZSet().zCard(key);
     }
 
     //setNx
