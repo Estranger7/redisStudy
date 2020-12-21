@@ -1,9 +1,10 @@
-package com.gkoudai.officialnetwork.Config;
+package com.estranger.www.config;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -14,15 +15,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Configuration
 public class ThreadPoolConfig {
 
-    @Bean("aliLogThreadPool")
-    public ThreadPoolTaskExecutor aliLogThreadPool() {
-        return createThreadPool(Runtime.getRuntime().availableProcessors() * 4, 500, "aliLog");
+    @Bean("queueThreadPool")
+    public ThreadPoolTaskExecutor queueThreadPool() {
+        return createThreadPool(Runtime.getRuntime().availableProcessors() * 4, 500, "queuePool");
     }
 
-    @Bean("qidThreadPool")
-    public ThreadPoolTaskExecutor qidThreadPool() {
-        return createThreadPool(Runtime.getRuntime().availableProcessors() * 4, 500, "qidThread");
-    }
 
     private ThreadPoolTaskExecutor createThreadPool(int size, int queueCapacity, String poolName) {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();

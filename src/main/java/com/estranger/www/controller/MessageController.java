@@ -1,4 +1,4 @@
-package com.estranger.www.controleller;
+package com.estranger.www.controller;
 
 import com.estranger.www.common.base.ResponseBase;
 import com.estranger.www.common.enumeration.ResponseStatusEnum;

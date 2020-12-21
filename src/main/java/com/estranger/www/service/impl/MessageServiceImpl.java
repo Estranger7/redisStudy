@@ -46,13 +46,13 @@ public class MessageServiceImpl implements MessageService {
 
     private Boolean isAllowed(String key, String value, Long nowTime, Integer period, Integer maxCount) {
         //移除当前时间窗口之前的行为
-        redisUtils.zremrangeByScore(key, Double.valueOf(0), Double.valueOf(nowTime - period * 1000));
+        redisUtils.zremrangeByScore(key, 0, nowTime - period * 1000);
         //获取当前zset的大小
         Integer count = (redisUtils.zcard(key)).intValue();
         Boolean replyFlag = count < maxCount;
         if (replyFlag) {
             //记录行为
-            redisUtils.zadd(key, value, Double.valueOf(nowTime));
+            redisUtils.zadd(key, value, nowTime);
             //设置当前key的失效时间（避免冷用户一直不回复，即不会触发zremrangeByScore，导致内存占用）
             redisUtils.expire(key, Long.valueOf(period), TimeUnit.SECONDS);
         }

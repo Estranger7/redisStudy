@@ -13,5 +13,6 @@ public class ConstantsValue {
      */
     public interface REDIS_KEY{
         String REPLY = "reply";
+        String DELAY_QUEUE = "delay";
     }
 }

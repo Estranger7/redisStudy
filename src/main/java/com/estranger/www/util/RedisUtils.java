@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -65,14 +66,24 @@ public class RedisUtils {
 
 
     //设置一个zset
-    public void zadd(String key,String value,Double score){
+    public void zadd(String key,String value,long score){
         redisTemplate.opsForZSet().add(key,value,score);
     }
 
 
     //移除某一个范围内的zset
-    public void zremrangeByScore(String key,Double start,Double end){
+    public void zremrangeByScore(String key,long start,long end){
         redisTemplate.opsForZSet().removeRangeByScore(key,start,end);
+    }
+
+    //移除某个特定值
+    public long zremrange(String key,String value){
+        return  redisTemplate.opsForZSet().remove(key,value);
+    }
+
+    //获取某个范围内的集合
+    public Set<Object> zrangeByScore(String key, long start, long end){
+        return redisTemplate.opsForZSet().rangeByScore(key,start,end);
     }
 
     //获取zset的大小
@@ -93,4 +104,5 @@ public class RedisUtils {
         List<String> keys = Collections.singletonList(key);
         return (String) stringRedisTemplate.execute(redisScript, keys,value,String.valueOf(time));
     }
+
 }
